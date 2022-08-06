@@ -1,0 +1,27 @@
+/* .main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.description {
+  font-size: 1.2rem;
+  white-space: pre-line;
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  font-size: 8rem;
+  margin: 0;
+  margin-left: 120px;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.body {
+  flex: 1;
+} */

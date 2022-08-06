@@ -1,0 +1,23 @@
+.inScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+.footer {
+  height: 80px;
+  width: 100%;
+  color: #dfdfdf;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 10px;
+}

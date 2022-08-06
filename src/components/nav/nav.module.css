@@ -1,0 +1,37 @@
+.nav {
+  display: flex;
+  font-size: 1.5em;
+}
+
+.item {
+  height: 2em;
+  position: relative;
+}
+
+.item > div {
+  height: 1em;
+
+  display: flex;
+  background: #b4ff13;
+  transition: 0.1s height ease-in-out;
+  padding: 0 20px 0 0;
+  box-sizing: border-box;
+
+  color: black;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.item > div > span {
+  margin-top: calc(1em - 2px);
+  font-size: 1em;
+  line-height: 1;
+}
+.item.active > div,
+.item:hover > div {
+  height: 2em;
+}
+
+.nav > * + * {
+  margin-left: 10px;
+}
