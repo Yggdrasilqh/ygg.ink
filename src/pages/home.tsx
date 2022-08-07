@@ -1,5 +1,7 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { FunctionComponent } from "react";
 import { Rain } from "../components";
+import { faFileArchive } from "@fortawesome/free-regular-svg-icons";
 
 export interface HomeProps {}
 
@@ -9,12 +11,13 @@ export const Home: FunctionComponent<HomeProps> = () => {
       <Rain />
       <div className="flex  items-end justify-between mt-auto">
         <div className="text-xl whitespace-pre-line">
+          <FontAwesomeIcon className="text-6xl mb-4" icon={faFileArchive} />
           {`
-            Mind archive, for memfree. 
-            Photo archive, for future. 
-            Working notes, for library.
+            Works archive.
+            Photos archive. 
+            Thoughts archive. 
             
-            And all about:`}
+            All about:`}
         </div>
         <h1 className="text-9xl">YGGDRASIL</h1>
       </div>

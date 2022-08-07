@@ -1,12 +1,135 @@
 const CONFIGS = {
-  maxDropNumbers: 30,
+  maxDropNumbers: 60,
   degree: 0,
   stepLength: 20,
   dropMaxSpeed: 5,
 };
 
+export class RainDrops {
+  private context: CanvasRenderingContext2D;
+  private rains = new Set<Rain>();
+  private drops = new Set<Drop>();
+  private dropRemain: Drop[] = [];
+  private rainRemain: Rain[] = [];
+  private dpr: number = 1;
+  private lastTimestamp: number = 0;
+
+  constructor(
+    private canvas: HTMLCanvasElement,
+    private rainShouldSplash?: (x: number, y: number) => boolean
+  ) {
+    this.context = canvas.getContext("2d")!;
+    this.resetSize();
+
+    this.context.clearRect(0, 0, canvas.width, canvas.height);
+
+    window.addEventListener("resize", () => {
+      this.resetSize();
+      console.log("resize");
+    });
+  }
+
+  private resetSize() {
+    const logicalWidth = window.innerWidth;
+    const logicalHeight = window.innerHeight;
+
+    const dpr = window.devicePixelRatio;
+    this.dpr = dpr;
+
+    const canvas = this.canvas;
+    canvas.width = logicalWidth * dpr;
+    canvas.height = logicalHeight * dpr;
+    canvas.style.width = logicalWidth + "px";
+    canvas.style.height = logicalHeight + "px";
+
+    this.context.scale(dpr, dpr);
+  }
+
+  private fillRains() {
+    while (this.rains.size < CONFIGS.maxDropNumbers) {
+      let rain = this.rainRemain.pop() ?? new Rain(this.canvas);
+      rain.init();
+      this.rains.add(rain);
+    }
+  }
+
+  private animation(timestamp: number) {
+    this.context.clearRect(
+      0,
+      0,
+      this.canvas.width * this.dpr,
+      this.canvas.height * this.dpr
+    );
+
+    // draw rains
+    this.context.beginPath();
+    this.rains.forEach((rain) => {
+      const { degree } = CONFIGS;
+
+      let middleSplash = this.rainShouldSplash?.(rain.x, rain.y + rain.height);
+
+      if (rain.y * this.dpr > this.canvas.height || middleSplash) {
+        if (!middleSplash) {
+          this.splashRain(rain);
+        }
+
+        this.rains.delete(rain);
+        this.rainRemain.push(rain);
+      }
+
+      rain.step(timestamp);
+
+      this.context.moveTo(rain.x, rain.y);
+      this.context.lineTo(
+        rain.x - Math.sin(degree) * rain.height,
+        rain.y + rain.height
+      );
+    });
+
+    this.context.lineWidth = 2;
+    this.context.stroke();
+
+    // draw drops
+    this.drops.forEach((drop) => {
+      if (drop.y * this.dpr > this.canvas.height + drop.radius) {
+        this.drops.delete(drop);
+        this.dropRemain.push(drop);
+      }
+
+      drop.step(timestamp);
+
+      var realX = drop.x - drop.radius;
+      var realY = drop.y - drop.radius;
+
+      this.context.drawImage(drop.canvas, realX, realY);
+    });
+
+    this.fillRains();
+  }
+
+  private splashRain(rain: Rain) {
+    for (let i = 0; i < getRandomArbitrary(6, 16); i++) {
+      let drop = this.dropRemain.pop() ?? new Drop();
+
+      drop.init(rain.x, this.canvas.height / this.dpr);
+
+      this.drops.add(drop);
+    }
+  }
+
+  run() {
+    requestAnimationFrame((timestamp) => {
+      let frameTime = timestamp - this.lastTimestamp;
+      this.lastTimestamp = timestamp;
+
+      this.animation(frameTime);
+      this.run();
+    });
+  }
+}
+
 interface Animator {
-  step(): void;
+  step(timestamp: number): void;
 }
 
 class Rain implements Animator {
@@ -14,9 +137,20 @@ class Rain implements Animator {
   y!: number;
   height!: number;
   width!: number;
+  speed: number = CONFIGS.stepLength;
+  deep: number = getRandomArbitrary(0, 10);
 
-  constructor(private canvasHeight: number, private canvasWidth: number) {
+  get canvasHeight(): number {
+    return this.canvas.height;
+  }
+
+  get canvasWidth(): number {
+    return this.canvas.width;
+  }
+
+  constructor(private canvas: HTMLCanvasElement) {
     // console.log("init rain");
+    this.speed -= this.deep;
   }
 
   init() {
@@ -29,11 +163,11 @@ class Rain implements Animator {
     this.height = getRandomArbitrary(20, 40);
   }
 
-  step() {
-    const { stepLength, degree } = CONFIGS;
+  step(timestamp: number) {
+    const { degree } = CONFIGS;
 
-    this.y += stepLength;
-    this.x += Math.floor(stepLength * Math.tan(degree));
+    this.y += this.speed * (timestamp / 16.67);
+    this.x += Math.floor(this.speed * Math.tan(degree));
   }
 }
 
@@ -89,14 +223,14 @@ class Drop implements Animator {
     this.speedY = -Math.cos(angle) * speed;
   }
 
-  step() {
+  step(timestamp: number) {
     // TODO:
     const wind = 0;
 
     const { dropMaxSpeed, stepLength } = CONFIGS;
 
     // TODO:
-    const multiplier = 1;
+    const multiplier = 1 * (timestamp / 16.67);
 
     this.x += this.speedX * multiplier;
     this.y += this.speedY * multiplier;
@@ -109,117 +243,6 @@ class Drop implements Animator {
     } else if (this.speedX > dropMaxSpeed) {
       this.speedX = dropMaxSpeed;
     }
-  }
-}
-
-export class RainDrops {
-  private context: CanvasRenderingContext2D;
-  private rains = new Set<Rain>();
-  private drops = new Set<Drop>();
-  private dropRemain: Drop[] = [];
-  private rainRemain: Rain[] = [];
-  private dpr: number;
-
-  constructor(
-    private canvas: HTMLCanvasElement,
-    private rainShouldSplash?: (x: number, y: number) => boolean
-  ) {
-    const logicalWidth = window.innerWidth;
-    const logicalHeight = window.innerHeight;
-
-    const dpr = window.devicePixelRatio;
-    this.dpr = dpr;
-
-    canvas.width = logicalWidth * dpr;
-    canvas.height = logicalHeight * dpr;
-    canvas.style.width = logicalWidth + "px";
-    canvas.style.height = logicalHeight + "px";
-
-    canvas.getContext("2d")!;
-
-    this.context = canvas.getContext("2d")!;
-
-    this.context.scale(dpr, dpr);
-
-    this.context.clearRect(0, 0, canvas.width, canvas.height);
-  }
-
-  private fillRains() {
-    while (this.rains.size < CONFIGS.maxDropNumbers) {
-      let rain =
-        this.rainRemain.pop() ??
-        new Rain(this.canvas.height, this.canvas.width);
-      rain.init();
-      this.rains.add(rain);
-    }
-  }
-
-  private animation() {
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    // draw rains
-    this.context.beginPath();
-    this.rains.forEach((rain) => {
-      const { degree } = CONFIGS;
-
-      let middleSplash = this.rainShouldSplash?.(rain.x, rain.y + rain.height);
-
-      if (rain.y * this.dpr > this.canvas.height || middleSplash) {
-        if (!middleSplash) {
-          this.splashRain(rain);
-        }
-
-        this.rains.delete(rain);
-        this.rainRemain.push(rain);
-      }
-
-      rain.step();
-
-      this.context.moveTo(rain.x, rain.y);
-      this.context.lineTo(
-        rain.x - Math.sin(degree) * rain.height,
-        rain.y + rain.height
-      );
-    });
-
-    this.context.lineWidth = 2;
-    this.context.stroke();
-
-    // draw drops
-    this.drops.forEach((drop) => {
-      if (drop.y * this.dpr > this.canvas.height + drop.radius) {
-        this.drops.delete(drop);
-        this.dropRemain.push(drop);
-      }
-
-      drop.step();
-
-      var realX = drop.x - drop.radius;
-      var realY = drop.y - drop.radius;
-
-      this.context.drawImage(drop.canvas, realX, realY);
-    });
-
-    this.fillRains();
-  }
-
-  private splashRain(rain: Rain) {
-    for (let i = 0; i < 16; i++) {
-      let drop = this.dropRemain.pop() ?? new Drop();
-      // console.log(rain.x, rain.y);
-
-      drop.init(rain.x, this.canvas.height / this.dpr);
-
-      this.drops.add(drop);
-    }
-  }
-
-  run() {
-    this.animation();
-
-    requestAnimationFrame(() => {
-      this.run();
-    });
   }
 }
 
