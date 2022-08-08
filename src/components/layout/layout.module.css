@@ -1,5 +1,4 @@
 .inScreen {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -7,8 +6,6 @@
 .main {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  height: 100%;
 }
 
 .footer {

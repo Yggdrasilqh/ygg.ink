@@ -7,11 +7,10 @@ export interface HomeProps {}
 
 export const Home: FunctionComponent<HomeProps> = () => {
   return (
-    <div className={"h-full flex-1 flex flex-col p-6"}>
+    <div className={"min-h-screen flex-1 flex flex-col p-6"}>
       <Rain />
       <div className="flex  items-end justify-between mt-auto">
         <div className="text-xl whitespace-pre-line">
-          <FontAwesomeIcon className="text-6xl mb-4" icon={faFileArchive} />
           {`
             Works archive.
             Photos archive. 

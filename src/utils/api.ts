@@ -1,26 +1,32 @@
 import fs from "fs";
 import { join } from "path";
 import matter from "gray-matter";
+import _ from "lodash";
 
 const postsDirectory = join(process.cwd(), "articles");
 
-export function getPostSlugs() {
+export function getPostPaths() {
   return fs.readdirSync(postsDirectory);
 }
 
-export function getPostBySlug(slug: string, fields: string[] = []) {
-  const realSlug = slug.replace(/\.md$/, "");
-  const fullPath = join(postsDirectory, `${realSlug}.md`);
+export function readPostById(id: string, fields: string[] = []) {
+  return readPostByPath(`${id}.md`, fields);
+}
+
+export function readPostByPath(path: string, fields: string[] = []) {
+  const fullPath = join(postsDirectory, path);
+
+  const id = path.replace(/\.md$/, "");
+
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
 
-  const items: Record<string, string> = {};
+  const items: Record<string, string> = {
+    id,
+  };
 
   // Ensure only the minimal needed data is exposed
   fields.forEach((field) => {
-    if (field === "slug") {
-      items[field] = realSlug;
-    }
     if (field === "content") {
       items[field] = content;
     }
@@ -28,28 +34,43 @@ export function getPostBySlug(slug: string, fields: string[] = []) {
     if (typeof data[field] !== "undefined") {
       items[field] = data[field];
     }
+
+    if (field === "coverImage" && data[field]) {
+      items[field] = `/assets/article/${id}/${data[field]}`;
+    }
   });
 
   return items;
 }
 
-export function getAllPosts(fields: string[] = []) {
-  const slugs = getPostSlugs();
-  const posts = slugs
-    .map((slug) => getPostBySlug(slug, fields))
-    // sort posts by date in descending order
+export function getAllPosts(fields: string[] = [], tag?: string) {
+  const paths = getPostPaths();
+
+  if (tag && !fields.includes("tag")) {
+    fields.push("tags");
+  }
+
+  let posts = paths.map((path) => readPostByPath(path, fields));
+
+  if (tag) {
+    posts = posts.filter((post) => (post.tags ?? []).includes(tag));
+  }
+
+  posts // sort posts by date in descending order
     .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
+
   return posts;
 }
 
-export interface Article {
-  title: string; //"Hello world",
-  date: string; //"2020-03-16T05:35:07.322Z",
-  slug: string; // "hello-world",
-  author: {
-    name: string; //"JJ Kasper",
-    picture: string; //"/assets/blog/authors/jj.jpeg"
+export interface ArticleExcerpt {
+  title: string;
+  date: string;
+  id: string;
+  author?: {
+    name?: string;
+    picture?: string;
   };
-  coverImage: string; //"/assets/blog/dynamic-routing/cover.jpg",
-  excerpt: string; //"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Praesent elementum facilisis leo vel fringilla est ullamcorper eget. At imperdiet dui accumsan sit amet nulla facilities morbi tempus."
+  tags?: string[];
+  coverImage?: string;
+  excerpt?: string;
 }

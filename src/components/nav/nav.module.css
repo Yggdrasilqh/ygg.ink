@@ -9,10 +9,11 @@
 }
 
 .item > div {
+  @apply bg-primary;
+
   height: 1em;
 
   display: flex;
-  background: #b4ff13;
   transition: 0.1s height ease-in-out;
   padding: 0 20px 0 0;
   box-sizing: border-box;

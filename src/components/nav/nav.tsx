@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { FunctionComponent } from "react";
+import React, { CSSProperties, FunctionComponent } from "react";
 import styles from "./nav.module.css";
 
 import "./nav.module.css";
@@ -13,17 +13,22 @@ export interface NavLink {
 }
 
 export interface NavProps {
-  className: string;
+  className?: string;
   links: NavLink[];
+  style?: CSSProperties;
 }
 
-export const Nav: FunctionComponent<NavProps> = ({ className, links }) => {
+export const Nav: FunctionComponent<NavProps> = ({
+  className,
+  links,
+  style,
+}) => {
   const router = useRouter();
 
   const pathname = router.pathname;
 
   return (
-    <nav className={classNames(styles.nav, className)}>
+    <nav className={classNames(className, styles.nav)} style={style}>
       {links.map(({ url, name, root }) => (
         <Link key={url} href={url}>
           <a

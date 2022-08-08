@@ -1,0 +1,4 @@
+.image {
+  margin: 0 10vw;
+  @apply mb-12;
+}
