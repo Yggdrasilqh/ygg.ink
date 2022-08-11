@@ -1,4 +1,13 @@
-.image {
-  margin: 0 10vw;
-  @apply mb-12;
+@keyframes color-pulse {
+  50% {
+    color: red;
+  }
+}
+.animate-color-pulse {
+  animation: color-pulse 1s cubic-bezier(0.4, 0, 0.6, 1);
+  animation-play-state: unset;
+}
+
+.animate-color-pulse:hover {
+  animation-play-state: running;
 }

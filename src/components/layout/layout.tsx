@@ -22,7 +22,7 @@ export const Layout: FunctionComponent<PropsWithChildren<LayoutProps>> = ({
           }
         }}
       >
-        <div className="group p-6 fixed z-10">
+        <div className="group p-6 fixed z-50">
           <div className={classNames("overflow-hidden")}>
             <Nav
               className={classNames("group-hover:mt-0 transition-all", {

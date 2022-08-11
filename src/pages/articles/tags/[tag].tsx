@@ -1,12 +1,13 @@
 import React, { FunctionComponent } from "react";
 import { ArticleExcerpt, getAllPosts } from "../../../utils";
 import { ArticleCard } from "../../../components";
+import { NextPageWithLayout } from "../../_app";
 
 export interface TagProps {
   allPosts: ArticleExcerpt[];
 }
 
-export const Tag: FunctionComponent<TagProps> = ({ allPosts }) => {
+export const Tag: NextPageWithLayout<TagProps> = ({ allPosts }) => {
   return (
     <div className="max-w-2xl mx-auto pt-2 px-10 box-content">
       {allPosts.map((post) => (
@@ -15,6 +16,8 @@ export const Tag: FunctionComponent<TagProps> = ({ allPosts }) => {
     </div>
   );
 };
+
+Tag.topMask = true;
 
 export default Tag;
 

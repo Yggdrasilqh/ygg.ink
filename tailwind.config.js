@@ -6,7 +6,13 @@ module.exports = {
       colors: {
         primary: "#b4ff13",
       },
+      flexGrow: {
+        2: 2,
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/typography"),
+    // ...
+  ],
 };
