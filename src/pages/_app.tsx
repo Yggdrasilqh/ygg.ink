@@ -5,12 +5,12 @@ import type { AppProps } from "next/app";
 import { Layout, TopMask } from "../components";
 import Head from "next/head";
 import type { NextPage } from "next";
-import type { ReactElement, ReactNode } from "react";
 
 config.autoAddCss = false;
 
 export type NextPageWithLayout<TProps> = NextPage<TProps> & {
   topMask?: boolean;
+  rememberScroll?: boolean;
 };
 
 type AppPropsWithOptions = AppProps & {
@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppPropsWithOptions) {
   }
 
   return (
-    <Layout>
+    <Layout rememberScroll={Component.rememberScroll}>
       <Head>
         <link rel="shortcut icon" href="/favicon.png" />
         <meta
@@ -38,6 +38,7 @@ function MyApp({ Component, pageProps }: AppPropsWithOptions) {
       </Head>
       {topMask}
       <Component {...pageProps} />
+      {/* <Toast /> */}
     </Layout>
   );
 }

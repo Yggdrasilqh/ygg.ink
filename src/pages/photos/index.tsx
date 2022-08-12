@@ -1,18 +1,14 @@
 import classNames from "classnames";
 import path, { join } from "path";
-import React, { FunctionComponent, memo, useCallback, useState } from "react";
+import React, { FunctionComponent, memo, useState } from "react";
 import { NextPageWithLayout } from "../_app";
 import fs from "fs";
-import _, { pick } from "lodash";
+import _ from "lodash";
 import Image from "next/image";
 
 export interface PhotosProps {
   photos: Record<string, string[]>;
 }
-
-const photos = [
-  110, 300, 200, 400, 180, 500, 120, 240, 523, 123, 422, 427, 388, 192, 294,
-];
 
 export const Photos: NextPageWithLayout<PhotosProps> = ({ photos }) => {
   const [picked, setPicked] = useState<string>();
@@ -63,7 +59,7 @@ const PhotoList: FunctionComponent<PhotoListProps> = ({
   return (
     <>
       {Object.keys(photos).map((dir) => (
-        <div key={dir} className=" pt-48 px-20 ">
+        <div key={dir} className="px-20 ">
           <h1 className="text-6xl mb-4">{dir}</h1>
           <div className={classNames("flex flex-wrap gap-10")}>
             {photos[dir].map((photo) => (
@@ -99,15 +95,18 @@ const PhotoList: FunctionComponent<PhotoListProps> = ({
   );
 };
 
-// <div className={classNames("flex flex-wrap gap-10 pt-48 px-20 ")}>
-// </div>
-
 const MemoPhotoList = memo(PhotoList);
+
+Photos.topMask = true;
 
 export default Photos;
 
 export async function getStaticProps() {
   const photosDict = join(process.cwd(), "public/assets/photos");
+
+  if (!fs.existsSync(photosDict)) {
+    return;
+  }
 
   const files = fs
     .readdirSync(photosDict, { withFileTypes: true })

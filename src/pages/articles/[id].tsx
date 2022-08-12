@@ -3,10 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { FunctionComponent, useCallback } from "react";
+import React, { useCallback } from "react";
 import { getAllPosts, markdownToHtml, readPostById } from "../../utils";
 import { NextPageWithLayout } from "../_app";
-import mint from "./mint.module.css";
 
 export interface ArticleProps {
   post: any;
@@ -84,6 +83,7 @@ export const Article: NextPageWithLayout<ArticleProps> = ({ post }) => {
 };
 
 Article.topMask = true;
+Article.rememberScroll = true;
 
 export default Article;
 
