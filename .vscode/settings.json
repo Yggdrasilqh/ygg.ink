@@ -6,5 +6,7 @@
   },
   "editor.quickSuggestions": {
     "strings": true
-  }
+  },
+  "cSpell.words": ["fontawesome", "fortawesome"],
+  "editor.tabSize": 2
 }

@@ -1,3 +1,14 @@
+---
+title: "Github favor Markdown Test"
+excerpt: "hey, do you like github?"
+date: "2020-03-14 6:30"
+author:
+  name: Yggdrasil
+tags:
+  - shit
+  - hello
+---
+
 # GFM
 
 ## Autolink literals
@@ -16,8 +27,11 @@ A note[^1]
 
 ## Table
 
-| a   | b   |   c |  d  |
-| --- | :-- | --: | :-: |
+| a         | b        |      c |   d    |
+| --------- | :------- | -----: | :----: |
+| 123123123 | 12312312 | 123123 | 123123 |
+| 123123123 | 12312312 | 123123 | 123123 |
+| 123123123 | 12312312 | 123123 | 123123 |
 
 ## Tasklist
 

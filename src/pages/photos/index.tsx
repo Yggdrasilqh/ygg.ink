@@ -1,26 +1,52 @@
 import classNames from "classnames";
 import path, { join } from "path";
-import React, { FunctionComponent, memo, useState } from "react";
+import React, {
+  FunctionComponent,
+  memo,
+  useCallback,
+  useState,
+} from "react";
 import { NextPageWithLayout } from "../_app";
 import fs from "fs";
 import _ from "lodash";
 import Image from "next/image";
+import { GetStaticProps } from "next";
 
-export interface PhotosProps {
+export interface PhotosPageProps {
   photos: Record<string, string[]>;
 }
 
-export const Photos: NextPageWithLayout<PhotosProps> = ({ photos }) => {
+export const PhotosPage: NextPageWithLayout<PhotosPageProps> = ({
+  photos,
+}) => {
   const [picked, setPicked] = useState<string>();
+  const dismissPreview = useCallback(() => {
+    setPicked(undefined);
+  }, []);
 
   return (
     <>
-      {picked && (
+      <Preview preview={picked} dismiss={dismissPreview} />
+      <MemoPhotoList photos={photos} setPicked={setPicked} />
+    </>
+  );
+};
+
+interface PreviewProps {
+  preview: string | undefined;
+  dismiss(): void;
+}
+
+const Preview: FunctionComponent<PreviewProps> = ({
+  preview,
+  dismiss,
+}) => {
+  return (
+    <>
+      {preview && (
         <div
           className="flex justify-center items-center fixed w-full h-full z-50 top-0 left-0 right-0 bottom-0"
-          onClick={() => {
-            setPicked(undefined);
-          }}
+          onClick={dismiss}
         >
           <div className="absolute w-full h-full bg-opacity-60 backdrop-blur-sm bg-black top-0 left-0 right-0 bottom-0" />
           <div
@@ -32,22 +58,21 @@ export const Photos: NextPageWithLayout<PhotosProps> = ({ photos }) => {
           >
             <div className="relative h-full">
               <Image
-                src={`/assets/photos/${picked}`}
+                src={preview}
                 layout="fill"
                 objectFit="contain"
-                alt={picked}
+                alt={preview}
                 objectPosition="center"
               />
             </div>
           </div>
         </div>
       )}
-      <MemoPhotoList photos={photos} setPicked={setPicked} />
     </>
   );
 };
 
-export interface PhotoListProps {
+interface PhotoListProps {
   photos: Record<string, string[]>;
   setPicked: (photo: string) => void;
 }
@@ -60,34 +85,40 @@ const PhotoList: FunctionComponent<PhotoListProps> = ({
     <>
       {Object.keys(photos).map((dir) => (
         <div key={dir} className="px-20 ">
-          <h1 className="text-6xl mb-4">{dir}</h1>
-          <div className={classNames("flex flex-wrap gap-10")}>
-            {photos[dir].map((photo) => (
-              <div
-                key={photo}
-                className="bg-purple-600 relative"
-                style={{
-                  minWidth: _.random(200, 600, false),
-                  height: 400,
-                  width: "auto",
-                  flexGrow: 1,
-                  fontSize: 60,
-                }}
-                onClick={() => {
-                  setPicked(photo);
-                }}
-              >
-                <Image
-                  src={`/assets/photos/${
-                    dir === "root" ? "" : `${dir}/`
-                  }${photo}`}
-                  layout="fill"
-                  objectFit="cover"
-                  alt={photo}
-                  objectPosition="center"
-                />
-              </div>
-            ))}
+          {dir !== "root" && (
+            <h1 className="text-6xl mb-4 mt-12">{dir}</h1>
+          )}
+          <div className={classNames("flex flex-wrap gap-6")}>
+            {photos[dir].map((photo) => {
+              const imagePath = `/assets/photos/${
+                dir === "root" ? "" : `${dir}/`
+              }${photo}`;
+
+              return (
+                <div
+                  key={photo}
+                  className="bg-purple-600 relative"
+                  style={{
+                    minWidth: _.random(200, 600, false),
+                    height: 400,
+                    width: "auto",
+                    flexGrow: 1,
+                    fontSize: 60,
+                  }}
+                  onClick={() => {
+                    setPicked(imagePath);
+                  }}
+                >
+                  <Image
+                    src={imagePath}
+                    layout="fill"
+                    objectFit="cover"
+                    alt={photo}
+                    objectPosition="center"
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       ))}
@@ -97,32 +128,36 @@ const PhotoList: FunctionComponent<PhotoListProps> = ({
 
 const MemoPhotoList = memo(PhotoList);
 
-Photos.topMask = true;
+PhotosPage.topMask = true;
 
-export default Photos;
+export default PhotosPage;
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps<
+  PhotosPageProps
+> = async () => {
   const photosDict = join(process.cwd(), "public/assets/photos");
 
   if (!fs.existsSync(photosDict)) {
-    return;
+    return { props: { photos: {} } };
   }
 
   const files = fs
     .readdirSync(photosDict, { withFileTypes: true })
     .filter((file) => !file.name.startsWith("."));
 
-  const map: any = { root: [] };
+  const photoGroupToPhotosDict: Record<string, string[]> = {
+    root: [],
+  };
 
   for (const file of files) {
     if (file.isDirectory()) {
-      map[file.name] = fs.readdirSync(path.join(photosDict, file.name));
+      photoGroupToPhotosDict[file.name] = fs.readdirSync(
+        path.join(photosDict, file.name)
+      );
     } else {
-      map["root"].push(file.name);
+      photoGroupToPhotosDict["root"].push(file.name);
     }
   }
 
-  console.log(map);
-
-  return { props: { photos: map } };
-}
+  return { props: { photos: photoGroupToPhotosDict } };
+};

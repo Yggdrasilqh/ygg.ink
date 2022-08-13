@@ -6,9 +6,10 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: Weaf Mono, Hiragino Kaku Gothic Pro, -apple-system,
-    BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans,
-    Droid Sans, Helvetica Neue, sans-serif;
+  font-family: Weaf Mono, "Hiragino Sans GB", -apple-system,
+    BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  overflow: hidden;
 }
 
 @font-face {

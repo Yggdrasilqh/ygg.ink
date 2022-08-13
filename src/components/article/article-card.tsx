@@ -4,8 +4,8 @@ import classNames from "classnames";
 import Link from "next/link";
 import Image from "next/image";
 import React, { FunctionComponent } from "react";
-import { ArticleExcerpt } from "../../utils";
 import { faHashtag } from "@fortawesome/free-solid-svg-icons";
+import { ArticleExcerpt } from "../../resources";
 
 export interface ArticleCardProps {
   article: ArticleExcerpt;
@@ -30,7 +30,7 @@ export const ArticleCard: FunctionComponent<ArticleCardProps> = ({
   return (
     <Link href={`/articles/${article.id}`}>
       <section className="group h-fit block cursor-pointer mb-20">
-        {article.coverImage && (
+        {article.cover && (
           <div
             className={classNames(
               "mb-4",
@@ -42,7 +42,7 @@ export const ArticleCard: FunctionComponent<ArticleCardProps> = ({
             )}
           >
             <Image
-              src={article.coverImage}
+              src={article.cover}
               alt="cover"
               layout="fill"
               objectFit="cover"
@@ -74,10 +74,17 @@ export const ArticleCard: FunctionComponent<ArticleCardProps> = ({
           <span className="ml-auto">
             {article.tags?.length && (
               <>
-                <FontAwesomeIcon className="text-sm" icon={faHashtag} />{" "}
+                <FontAwesomeIcon
+                  className="text-sm"
+                  icon={faHashtag}
+                />{" "}
                 {article.tags.map((tag, index) => (
                   <span key={tag}>
-                    <span className={classNames("hover:underline")}>{tag}</span>
+                    <Link href={`/articles/tags/${tag}`}>
+                      <span className={classNames("hover:underline")}>
+                        {tag}
+                      </span>
+                    </Link>
                     {index !== article.tags!.length - 1 ? ", " : ""}
                   </span>
                 ))}

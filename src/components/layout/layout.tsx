@@ -19,13 +19,11 @@ export interface LayoutProps {
 
 const func = _.debounce((path: string, scrollTop: number) => {
   localStorage.setItem(path, `${scrollTop}`);
-  console.log(path, scrollTop);
 }, 200);
 
-export const Layout: FunctionComponent<PropsWithChildren<LayoutProps>> = ({
-  children,
-  rememberScroll,
-}) => {
+export const Layout: FunctionComponent<
+  PropsWithChildren<LayoutProps>
+> = ({ children, rememberScroll }) => {
   const [collapseNav, setCollapseNav] = useState(false);
 
   const router = useRouter();
@@ -60,6 +58,7 @@ export const Layout: FunctionComponent<PropsWithChildren<LayoutProps>> = ({
         scrollableElement.scrollTo(0, targetTop);
       } else {
         scrollableElement.scrollTo(0, 0);
+        setCollapseNav(false);
       }
     }
   }, [path, rememberScroll]);
@@ -67,16 +66,23 @@ export const Layout: FunctionComponent<PropsWithChildren<LayoutProps>> = ({
   return (
     <>
       <div
-        className={classNames(styles.inScreen, "overflow-auto", "h-screen")}
+        className={classNames(
+          styles.inScreen,
+          "overflow-auto",
+          "h-screen"
+        )}
         ref={scrollArea}
         onScroll={rememberScroll ? onScroll : undefined}
       >
         <div className="group p-6 fixed z-50">
           <div className={classNames("overflow-hidden")}>
             <Nav
-              className={classNames("group-hover:mt-0 transition-all", {
-                "-mt-5": collapseNav,
-              })}
+              className={classNames(
+                "group-hover:mt-0 transition-all",
+                {
+                  "-mt-5": collapseNav,
+                }
+              )}
               links={[
                 { name: "Home", url: "/home", root: true },
                 { name: "Articles", url: "/articles" },

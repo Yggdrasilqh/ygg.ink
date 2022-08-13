@@ -1,7 +1,7 @@
 ---
 title: "Hello world"
 excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Praesent elementum facilisis leo vel fringilla est ullamcorper eget. At imperdiet dui accumsan sit amet nulla facilities morbi tempus."
-coverImage: "cover.jpg"
+cover: "cover.jpg"
 date: "2020-03-14T05:35:07.322Z"
 author:
   name: JJ Kasper
@@ -15,7 +15,7 @@ tags:
 
 # 詩人節剛過，想起曾為周夢蝶作序。
 
-### <跨界>
+## <跨界>
 
 曾寫了一首名為『周夢蝶』的歌，歌頌心中孤絕飄逸的詩人，才因緣際會與曾進豐和向明兩位老師一同前往周夢蝶先生家中，我從我的周夢蝶，一躍進入了我以外的周夢蝶，這兩者之間曾經有一道厚實的牆，就這樣被我跨越。那時還是過年後的春天，屋外是新店刺寒的強風，室內閃著清冷的日光燈，空蕩的客廳，書桌上壓著幾張他的字，極度瘦弱單薄的身體，承受一雙囧囧眼神，我致贈了我的作品和禮物，他邊看還幽默的說笑，說話時習慣揚起手臂，最後他拿起一張寫的好長好長的紙條給我看，他喜歡親手將紙剪成細長的尺寸，不留過多的空白，經他剪裁過後的紙張，搭配他瘦勁的筆跡，就是一個完整的世界，立體的孤絕。
 

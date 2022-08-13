@@ -1,35 +1,38 @@
 import classNames from "classnames";
 import _ from "lodash";
-import Link from "next/link";
-import React, { FunctionComponent } from "react";
-import { ArticleCard, TagList, TopMask } from "../../components";
-import { ArticleExcerpt, getAllPosts } from "../../utils";
+import { GetStaticProps } from "next";
+import React from "react";
+import { ArticleCard, TagList } from "../../components";
+import {
+  ArticleExcerpt,
+  readAllArticleExcept,
+} from "../../resources";
 import { NextPageWithLayout } from "../_app";
-import styles from "./article.module.css";
 
 export interface ArticlesProps {
-  allPosts: ArticleExcerpt[];
+  articleExcerpts: ArticleExcerpt[];
   tags: string[];
 }
 
 export const Articles: NextPageWithLayout<ArticlesProps> = ({
-  allPosts,
+  articleExcerpts,
   tags,
 }) => {
   return (
     <div className="max-w-4xl px-10 flex min-w-full">
-      <div className={classNames("grow")} />
-      <div className="flex">
-        <div className="flex-none">
+      <div className={classNames("grow", "flex")}>
+        <div className="shrink ml-auto" style={{ maxWidth: 200 }}>
           <div className="mr-10 sticky top-40 align-top">
-            <div className=" w-0.5 bg-black -left-0 top-80 bottom-1" />
+            <div className="w-0.5 bg-black -left-0 top-80 bottom-1" />
             <h1 className="text-2xl mb-2 ml-2">Tags</h1>
             <TagList tags={tags} />
           </div>
         </div>
+      </div>
+      <div className="flex">
         <div className={classNames("box-content", "max-w-2xl")}>
-          {allPosts.map((post) => (
-            <ArticleCard key={post.id} article={post} />
+          {articleExcerpts.map((article) => (
+            <ArticleCard key={article.id} article={article} />
           ))}
         </div>
       </div>
@@ -42,24 +45,21 @@ Articles.topMask = true;
 
 export default Articles;
 
-export async function getStaticProps() {
-  const allPosts = getAllPosts([
-    "title",
-    "date",
-    "author",
-    "coverImage",
-    "excerpt",
-    "tags",
-  ]);
+export const getStaticProps: GetStaticProps<
+  ArticlesProps
+> = async () => {
+  const articleExcerpts = readAllArticleExcept();
 
   const tags =
     _.compact(
-      _.uniq(allPosts.map((post) => post.tags).flatMap((tags) => tags))
+      _.uniq(
+        articleExcerpts
+          .map((post) => post.tags)
+          .flatMap((tags) => tags)
+      )
     ) ?? [];
 
-  console.log(tags);
-
   return {
-    props: { allPosts, tags },
+    props: { articleExcerpts, tags },
   };
-}
+};

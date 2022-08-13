@@ -25,7 +25,6 @@ export class RainDrops {
 
     window.addEventListener("resize", () => {
       this.resetSize();
-      console.log("resize");
     });
   }
 
@@ -66,7 +65,10 @@ export class RainDrops {
     this.rains.forEach((rain) => {
       const { degree } = CONFIGS;
 
-      let middleSplash = this.rainShouldSplash?.(rain.x, rain.y + rain.height);
+      let middleSplash = this.rainShouldSplash?.(
+        rain.x,
+        rain.y + rain.height
+      );
 
       if (rain.y * this.dpr > this.canvas.height || middleSplash) {
         if (!middleSplash) {

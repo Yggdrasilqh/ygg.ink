@@ -6,15 +6,19 @@ export interface TagListProps {
   tags: string[];
 }
 
-export const TagList: FunctionComponent<TagListProps> = ({ tags }) => {
+export const TagList: FunctionComponent<TagListProps> = ({
+  tags,
+}) => {
   return (
     <>
       {tags.map((tag) => (
-        <div key={tag}>
-          -{" "}
+        <div key={tag} className="flex items-center mb-1.5">
+          <span className="mr-1">-</span>
           <Link href={`/articles/tags/${tag}`}>
-            <span
+            <div
               className={classNames(
+                "flex",
+                "min-w-0",
                 "relative",
                 "cursor-pointer",
                 "hover:after:w-full",
@@ -28,8 +32,20 @@ export const TagList: FunctionComponent<TagListProps> = ({ tags }) => {
                 "after:transition-all"
               )}
             >
-              {tag}
-            </span>
+              <span
+                className={classNames(
+                  "whitespace-nowrap",
+                  "overflow-x-hidden",
+                  "text-ellipsis"
+                )}
+              >
+                {tag}
+                {tag}
+                {tag}
+                {tag}
+                {tag}
+              </span>
+            </div>
           </Link>
         </div>
       ))}
