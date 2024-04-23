@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 import { Layout, TopMask } from "../components";
 import Head from "next/head";
 import type { NextPage } from "next";
+import { FC, ReactNode } from "react";
 
 config.autoAddCss = false;
 
@@ -17,7 +18,7 @@ type AppPropsWithOptions = AppProps & {
   Component: NextPageWithLayout<unknown>;
 };
 
-function MyApp({ Component, pageProps }: AppPropsWithOptions) {
+const MyApp: FC<AppPropsWithOptions> = ({ Component, pageProps }) => {
   let topMask = <></>;
 
   if (Component.topMask) {
@@ -28,19 +29,19 @@ function MyApp({ Component, pageProps }: AppPropsWithOptions) {
     <Layout rememberScroll={Component.rememberScroll}>
       <Head>
         <link rel="shortcut icon" href="/favicon.png" />
-        <meta
+        {/* <meta
           name="viewport"
           content="width=device-width"
-          initial-scale="1.0"
-          user-scalable="no"
-          viewport-fit="cover"
-        />
+          initialScale="1.0"
+          userScalable="no"
+          viewportFit="cover"
+        /> */}
       </Head>
       {topMask}
       <Component {...pageProps} />
       {/* <Toast /> */}
     </Layout>
   );
-}
+};
 
 export default MyApp;

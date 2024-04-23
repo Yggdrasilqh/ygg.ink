@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import * as THREE from "three";
 import { useEffect, useRef, useState } from "react";
 import {
