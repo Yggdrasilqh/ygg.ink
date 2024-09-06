@@ -23,6 +23,7 @@ import {
 } from "@react-three/rapier";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import { useControls } from "leva";
+import classNames from "classnames";
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 useGLTF.preload("/assets/card/card.glb");
@@ -31,7 +32,10 @@ useTexture.preload("/assets/card/band.jpg");
 export function Card() {
   // const { debug } = useControls({ debug: false })
   return (
-    <Canvas camera={{ position: [0, 0, 13], fov: 25 }}>
+    <Canvas
+      className={classNames(className)}
+      camera={{ position: [0, 0, 13], fov: 25 }}
+    >
       <ambientLight intensity={Math.PI} />
       <Physics
         debug={false}
