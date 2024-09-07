@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
@@ -8,12 +8,12 @@ import { NextPageWithLayout } from "./_app";
 export interface ResumeProps {}
 
 export const Resume: NextPageWithLayout<ResumeProps> = () => {
-  return (
-    <iframe
-      className="h-screen mb-2"
-      src="https://pjigj2ikbamdp3sp.public.blob.vercel-storage.com/YGG-CN-Resume-DnXH0WsBHJEIbYpYSmZejpMsabh59E.pdf#toolbar=0&navpanes=0zoom=page-width"
-    />
-  );
+  useEffect(() => {
+    location.href =
+      "https://pjigj2ikbamdp3sp.public.blob.vercel-storage.com/YGG-CN-Resume-DnXH0WsBHJEIbYpYSmZejpMsabh59E.pdf";
+  }, []);
+
+  return <></>;
 };
 
 Resume.topMask = false;

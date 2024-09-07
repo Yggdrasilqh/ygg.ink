@@ -42,6 +42,10 @@ const MyApp: FC<AppPropsWithOptions> = ({ Component, pageProps }) => {
           userScalable="no"
           viewportFit="cover"
         /> */}
+        {/* <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+        /> */}
       </Head>
       {topMask}
       <Component {...pageProps} />
