@@ -12,9 +12,12 @@ export const TagList: FunctionComponent<TagListProps> = ({
   return (
     <>
       {tags.map((tag) => (
-        <div key={tag} className="flex items-center mb-1.5">
+        <div
+          key={tag}
+          className="flex items-center mb-1.5 overflow-hidden"
+        >
           <span className="mr-1">-</span>
-          <Link href={`/articles/tags/${tag}`}>
+          <Link className="min-w-0" href={`/articles/tags/${tag}`}>
             <div
               className={classNames(
                 "flex",

@@ -11,6 +11,8 @@ config.autoAddCss = false;
 
 export type NextPageWithLayout<TProps> = NextPage<TProps> & {
   topMask?: boolean;
+  withoutNav?: boolean;
+  footerPrefix?: ReactNode;
   rememberScroll?: boolean;
 };
 
@@ -26,7 +28,11 @@ const MyApp: FC<AppPropsWithOptions> = ({ Component, pageProps }) => {
   }
 
   return (
-    <Layout rememberScroll={Component.rememberScroll}>
+    <Layout
+      withoutNav={Component.withoutNav}
+      rememberScroll={Component.rememberScroll}
+      footerPrefix={Component.footerPrefix}
+    >
       <Head>
         <link rel="shortcut icon" href="/favicon.png" />
         {/* <meta

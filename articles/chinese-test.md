@@ -1,5 +1,5 @@
 ---
-title: "中文测试-这里是一个中文标题"
+title: "中文测试"
 excerpt: "JavaScript 有一个基于事件循环的并发模型，
 事件循环负责执行代码、收集和处理事件以及执行队列中的子任务。
 这个模型与其它语言中的模型截然不同，比如 C 和 Java。"
@@ -11,13 +11,9 @@ tags:
   - hello
 ---
 
-# 走进 Markdown 园子
-
 ---
 
-> 起初也就是打算简单一些 Markdown 在编辑 Blog 方面的一些常用操作和注意事项，没想到，一下没刹住，毫无防备地闯进了这个好趣的园子....
-
-## 1. 认识 Markdown
+## 1. Markdown
 
 > HTML(HyperText Markup Language)作为一种超文本标记语言(markup language)应运而生，无数的网页从此有了主次分明，层次清晰的格式。如果将 HTML 比作一架重机枪，那么 Markdown 就是一把手枪，满足了主要的文本格式标记的需求，可是操作性却大大简化。秉承**「易读易写」**的宗旨，Markdown 作为一种轻量级标记语言(lightweight markup language)，让无数的程序猿和文字工作者爱不释手。
 

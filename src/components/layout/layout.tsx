@@ -15,6 +15,8 @@ import styles from "./layout.module.css";
 
 export interface LayoutProps {
   rememberScroll?: boolean;
+  withoutNav?: boolean;
+  footerPrefix?: React.ReactNode;
 }
 
 const func = _.debounce((path: string, scrollTop: number) => {
@@ -23,7 +25,7 @@ const func = _.debounce((path: string, scrollTop: number) => {
 
 export const Layout: FunctionComponent<
   PropsWithChildren<LayoutProps>
-> = ({ children, rememberScroll }) => {
+> = ({ children, rememberScroll, withoutNav, footerPrefix }) => {
   const [collapseNav, setCollapseNav] = useState(false);
 
   const router = useRouter();
@@ -74,27 +76,29 @@ export const Layout: FunctionComponent<
         ref={scrollArea}
         onScroll={rememberScroll ? onScroll : undefined}
       >
-        <div className="group p-6 fixed z-50">
-          <div className={classNames("overflow-hidden")}>
-            <Nav
-              className={classNames(
-                "group-hover:mt-0 transition-all",
-                {
-                  "-mt-5": collapseNav,
-                }
-              )}
-              links={[
-                { name: "Home", url: "/home", root: true },
-                { name: "Articles", url: "/articles" },
-                { name: "Photos", url: "/photos" },
-                { name: "About", url: "/about" },
-              ]}
-            />
+        {!withoutNav && (
+          <div className="group p-6 fixed z-50">
+            <div className={classNames("overflow-hidden")}>
+              <Nav
+                className={classNames(
+                  "group-hover:mt-0 transition-all",
+                  {
+                    "-mt-5": collapseNav,
+                  }
+                )}
+                links={[
+                  { name: "Home", url: "/home", root: true },
+                  { name: "Articles", url: "/articles" },
+                  { name: "Photos", url: "/photos" },
+                  { name: "About", url: "/about" },
+                ]}
+              />
+            </div>
           </div>
-        </div>
+        )}
         <main className={classNames(styles.main)}>{children}</main>
         <footer className={styles.footer}>
-          Design, development by yggdrasil.
+          {footerPrefix} Design, development by yggdrasil.
         </footer>
       </div>
     </>

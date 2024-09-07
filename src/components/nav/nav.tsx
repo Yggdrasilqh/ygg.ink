@@ -31,17 +31,18 @@ export const Nav: FunctionComponent<NavProps> = ({
     <nav className={classNames(className, styles.nav)} style={style}>
       {links.map(({ url, name, root }) => (
         <Link key={url} href={url}>
-          <a
+          <div
             className={classNames(
               styles.item,
-              (pathname.startsWith(url) || (root && pathname === "/")) &&
+              (pathname.startsWith(url) ||
+                (root && pathname === "/")) &&
                 styles.active
             )}
           >
             <div>
               <span>{name}</span>
             </div>
-          </a>
+          </div>
         </Link>
       ))}
     </nav>
